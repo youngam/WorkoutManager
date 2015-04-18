@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/WorkoutManager.iml" filepath="$PROJECT_DIR$/WorkoutManager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/acra-4.6.1/acra-4.6.1.iml" filepath="$PROJECT_DIR$/acra-4.6.1/acra-4.6.1.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

@@ -4,5 +4,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="manText">Man</string>
-    <string name="womanText">Woman</string>
+    <string name="Trainings">Список тренировок</string>
+    <string name="MuscleGroups">Группы мышц</string>
 </resources>

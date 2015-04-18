@@ -2,17 +2,20 @@ package youngam.bsuir;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import youngam.bsuir.man.WorkoutManActivity;
-import youngam.bsuir.woman.WorkoutWomanActivity;
+import youngam.bsuir.exercises.WorkoutManActivity;
+import youngam.bsuir.exercises.parser.MySQLiteDB;
+import youngam.bsuir.trainings.TrainingActivity;
 
 
 public class MainActivity extends Activity implements View.OnClickListener {
     private Button man;
     private Button woman;
+    private MySQLiteDB db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,21 +23,40 @@ public class MainActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
         man = (Button) findViewById(R.id.manButton);
         man.setOnClickListener(this);
-        woman = (Button) findViewById(R.id.womanButton);
+        woman = (Button) findViewById(R.id.buttonTrainings);
         woman.setOnClickListener(this);
+        //инициализация базы
+        db = new MySQLiteDB();
+        db.initDb(getApplicationContext());
+        //Если база пустая, то наполняем её
+        if (db.isEmpty()) {
+            new AsyncTask<String, String, String>() {
+                @Override
+                protected String doInBackground(String... params) {
+                    try {
+                        db.parseFile(getResources().openRawResource(R.raw.fitness_exercise));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+            }.execute(null, null, null);
+        }
     }
 
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.manButton:
+
                 Intent manIntent = new Intent(this, WorkoutManActivity.class);
                 startActivity(manIntent);
                 break;
-            case R.id.womanButton:
-                Intent womanIntent = new Intent(this, WorkoutWomanActivity.class);
-                startActivity(womanIntent);
+            case R.id.buttonTrainings:
+
+                Intent trainingIntent = new Intent(this, TrainingActivity.class);
+                startActivity(trainingIntent);
                 break;
         }
 
