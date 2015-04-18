@@ -43,13 +43,12 @@ public class MySQLiteDB {
     // / метод для добавления мышечной группы
 
     public void addToMuscleGroupDb(String name) {
-        //FIXME повторное добавление данных в бд
         ContentValues values = new ContentValues();
         values.put(Tables.COLUMN_NAME, name);
         database.insert(Tables.TABLE_MUSCLE_GROUPS, null, values);
     }
     //Достаём данные из бд и кладём их в ArrayList
-    public ArrayList<WorkoutCategory> getMuscleGroup() {
+    public ArrayList<WorkoutCategory> getMuscleGroups() {
         Cursor cursor = database.query(Tables.TABLE_MUSCLE_GROUPS, null, null,
                 null, null, null, null);
         cursor.moveToFirst();
@@ -63,6 +62,18 @@ public class MySQLiteDB {
         }
         cursor.close();
         return categories;
+    }
+
+    public String getMuscleGroupId(String name){
+        Cursor cursor = database.query(Tables.TABLE_MUSCLE_GROUPS, null,
+                Tables.COLUMN_NAME + "= ?",
+                new String[]{name}, null, null, null);
+        cursor.moveToFirst();
+
+        System.out.println(cursor.getString(cursor.getColumnIndex(Tables.COLUMN_ID)));
+
+        return cursor.getString(cursor.getColumnIndex(Tables.COLUMN_ID));
+
     }
 
 

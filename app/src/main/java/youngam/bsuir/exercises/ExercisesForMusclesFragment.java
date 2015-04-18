@@ -56,7 +56,7 @@ public class ExercisesForMusclesFragment extends ListFragment {
         fragment.setArguments(bundle);
         //execute activity switchFragment method
         //which move this fragment to the main UI
-        ((SwitchFragmentListener) getActivity()).switchFragment(fragment);
+        ((SwitchFragmentListener) getActivity()).switchFragment(fragment, true);
     }
 
 

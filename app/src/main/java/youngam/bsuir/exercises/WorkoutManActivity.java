@@ -20,9 +20,6 @@ public class WorkoutManActivity extends ActionBarActivity implements SwitchFragm
     private static final String LOG_TAG = WorkoutManActivity.class.getSimpleName();
     private MySQLiteDB db;
 
-    //FIXME Fix bug when KEY_BACK pressed
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,20 +31,26 @@ public class WorkoutManActivity extends ActionBarActivity implements SwitchFragm
         getSupportActionBar().setTitle("Группы мышц");
         if (savedInstanceState == null) {
             MuscleGroupsFragment fragment = new MuscleGroupsFragment();
-            switchFragment(fragment);
+            switchFragment(fragment, false);
+
         }
 
     }
 
 
     @Override
-    public void switchFragment(Fragment fragment) {
+    public void switchFragment(Fragment fragment, boolean addToBackStack) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+        if(addToBackStack) {
+            fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+        }
+        else{
+            fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+        }
 
     }
     public ArrayList<WorkoutCategory> getMuscleGroup() throws Exception {
-        return db.getMuscleGroup();
+        return db.getMuscleGroups();
     }
     public ArrayList<WorkoutCategory> getExercises(String id) throws Exception {
         return db.getExercises(id);

@@ -10,9 +10,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import youngam.bsuir.R;
+import youngam.bsuir.core.model.WorkoutCategory;
 import youngam.bsuir.exercises.parser.MySQLiteDB;
 
 /**
@@ -39,6 +40,10 @@ public class AddingWorkout extends Fragment implements View.OnClickListener {
 
         spinnerGroups = (MultiSelectionSpinner) view.findViewById(R.id.spinnerGroups);
         spinnerGroups.setItems(data);
+        ArrayList<String> temp = (ArrayList<String>) spinnerGroups.getResult();
+        for(String str : temp){
+
+        }
         spinnerExercises = (MultiSelectionSpinner) view.findViewById(R.id.spinnerExercises);
         spinnerExercises.setItems(data);
         return view;
@@ -60,7 +65,14 @@ public class AddingWorkout extends Fragment implements View.OnClickListener {
 
         }
     }
-    public List<String> getExercise(){
+    public void initDb(){
+        db = new MySQLiteDB();
+        db.initDb(getActivity().getApplicationContext());
+    }
+    public ArrayList<WorkoutCategory> getExercise(String muscleGroup){
+        String id = db.getMuscleGroupId(muscleGroup);
+        ArrayList<WorkoutCategory> exercises = db.getExercises(id);
+        return exercises;
 
     }
 

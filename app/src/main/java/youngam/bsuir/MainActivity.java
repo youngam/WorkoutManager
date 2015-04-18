@@ -13,35 +13,21 @@ import youngam.bsuir.trainings.TrainingActivity;
 
 
 public class MainActivity extends Activity implements View.OnClickListener {
-    private Button man;
-    private Button woman;
+    private Button mBtnMan;
+    private Button mBtnWoman;
     private MySQLiteDB db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        man = (Button) findViewById(R.id.manButton);
-        man.setOnClickListener(this);
-        woman = (Button) findViewById(R.id.buttonTrainings);
-        woman.setOnClickListener(this);
-        //инициализация базы
-        db = new MySQLiteDB();
-        db.initDb(getApplicationContext());
-        //Если база пустая, то наполняем её
-        if (db.isEmpty()) {
-            new AsyncTask<String, String, String>() {
-                @Override
-                protected String doInBackground(String... params) {
-                    try {
-                        db.parseFile(getResources().openRawResource(R.raw.fitness_exercise));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                }
-            }.execute(null, null, null);
-        }
+        mBtnMan = (Button) findViewById(R.id.manButton);
+        mBtnMan.setOnClickListener(this);
+        mBtnWoman = (Button) findViewById(R.id.buttonTrainings);
+        mBtnWoman.setOnClickListener(this);
+        // заполняю бд
+        fillDb();
+
     }
 
 
@@ -60,5 +46,24 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 break;
         }
 
+    }
+    public void fillDb(){
+        //инициализация базы
+        db = new MySQLiteDB();
+        db.initDb(getApplicationContext());
+        //Если база пустая, то наполняем её
+        if (db.isEmpty()) {
+            new AsyncTask<String, String, String>() {
+                @Override
+                protected String doInBackground(String... params) {
+                    try {
+                        db.parseFile(getResources().openRawResource(R.raw.fitness_exercise));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+            }.execute(null, null, null);
+        }
     }
 }

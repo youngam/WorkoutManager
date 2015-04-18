@@ -18,9 +18,10 @@ import java.util.List;
 public class MultiSelectionSpinner extends Spinner implements DialogInterface.OnMultiChoiceClickListener{
     private String[] items = null;
     private ArrayAdapter<String> adapter;
-    private String result;
     // массив для проверки, какие checkboxes нажаты
     boolean[] selection = null;
+    // FIXME костыль для проверки, нажата ли кнопка
+    private boolean isClicked = false;
 
     public MultiSelectionSpinner(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -46,19 +47,25 @@ public class MultiSelectionSpinner extends Spinner implements DialogInterface.On
         }
 
     }
+    //Вроде как опять кастыль для проверки, нажата ли кнопка
+    public boolean isClicked(){
+        return isClicked;
+    }
 
     // Метод, показывающий выпадающий список
     // Оказыватся, сделан на основе AlertDialog :)
     @Override
     public boolean performClick() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMultiChoiceItems(items, selection, this);
         //Кнопка для подтверждения
         builder.setNeutralButton("Finished", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                isClicked = true;
                 StringBuilder sb = new StringBuilder();
                 //Достаём информацию из List
+
                 for (String str : getResult()) {
                     sb.append(str);
                     sb.append("\n");

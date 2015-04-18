@@ -64,6 +64,6 @@ public class MuscleGroupsFragment extends ListFragment {
         Bundle bundle = new Bundle();
         bundle.putString("category", mCategories.get(position).getId());
         fragment.setArguments(bundle);
-        ((SwitchFragmentListener) getActivity()).switchFragment(fragment);
+        ((SwitchFragmentListener) getActivity()).switchFragment(fragment,true);
     }
 }

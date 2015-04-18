@@ -42,7 +42,7 @@ public class TrainingActivity extends ActionBarActivity{
     }
     public void switchFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.pager, fragment).addToBackStack(null).commit();
+        fragmentManager.beginTransaction().replace(R.id.pager, fragment).commit();
 
     }
 
