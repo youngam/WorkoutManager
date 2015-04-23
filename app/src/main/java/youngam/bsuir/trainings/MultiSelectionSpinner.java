@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import youngam.bsuir.listener.OnFinishedListener;
+
 /**
  * Created by Alex on 14.04.2015.
  */
@@ -20,8 +22,7 @@ public class MultiSelectionSpinner extends Spinner implements DialogInterface.On
     private ArrayAdapter<String> adapter;
     // массив для проверки, какие checkboxes нажаты
     boolean[] selection = null;
-    // FIXME костыль для проверки, нажата ли кнопка
-    private boolean isClicked = false;
+    private OnFinishedListener listener;
 
     public MultiSelectionSpinner(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -29,6 +30,12 @@ public class MultiSelectionSpinner extends Spinner implements DialogInterface.On
         adapter = new ArrayAdapter<>(context,
                 android.R.layout.simple_spinner_item);
         super.setAdapter(adapter);
+    }
+    //Что именно писать в этом методе?
+    public void setOnFinishedListener(){
+        if(listener != null){
+           listener.onFinish(); ;
+        }
     }
 
 
@@ -47,10 +54,7 @@ public class MultiSelectionSpinner extends Spinner implements DialogInterface.On
         }
 
     }
-    //Вроде как опять кастыль для проверки, нажата ли кнопка
-    public boolean isClicked(){
-        return isClicked;
-    }
+
 
     // Метод, показывающий выпадающий список
     // Оказыватся, сделан на основе AlertDialog :)
@@ -61,8 +65,8 @@ public class MultiSelectionSpinner extends Spinner implements DialogInterface.On
         //Кнопка для подтверждения
         builder.setNeutralButton("Finished", new DialogInterface.OnClickListener() {
             @Override
+            //Вот нажатие, после которого должно идти заполнение второго спинера
             public void onClick(DialogInterface dialog, int which) {
-                isClicked = true;
                 StringBuilder sb = new StringBuilder();
                 //Достаём информацию из List
 

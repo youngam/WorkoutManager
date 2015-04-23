@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -39,6 +40,17 @@ public class AddingWorkout extends Fragment implements View.OnClickListener {
         timeButton.setOnClickListener(this);
 
         spinnerGroups = (MultiSelectionSpinner) view.findViewById(R.id.spinnerGroups);
+        spinnerGroups.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getActivity().getApplicationContext(), "spinnerGroupsClick", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         spinnerGroups.setItems(data);
         ArrayList<String> temp = (ArrayList<String>) spinnerGroups.getResult();
         for(String str : temp){
