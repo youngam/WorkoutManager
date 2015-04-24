@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -16,48 +15,49 @@ import java.util.ArrayList;
 import youngam.bsuir.R;
 import youngam.bsuir.core.model.WorkoutCategory;
 import youngam.bsuir.exercises.parser.MySQLiteDB;
+import youngam.bsuir.listener.OnFinishedListener;
 
 /**
  * Created by Alex on 15.04.2015.
  */
 public class AddingWorkout extends Fragment implements View.OnClickListener {
-    private Button addButton;
-    private Button dateButton;
-    private Button timeButton;
     private MySQLiteDB db;
     private DialogFragment dialogFragment;
-    private String[] data = {"Ноги", "Бицепс", "Спина", "Трицепс", "Дельты", "Грудь", "Грудь"};
     private MultiSelectionSpinner spinnerGroups, spinnerExercises;
-    @Override
+
+        @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate( R.layout.adding_worlout, container, false);
-        // Объявление кнопок
-        addButton = (Button) view.findViewById(R.id.btnAdd);
+        View view = inflater.inflate( R.layout.adding_workout, container, false);
+
+        // Button initialization
+        Button addButton = (Button) view.findViewById(R.id.btnAdd);
         addButton.setOnClickListener(this);
-        dateButton = (Button) view.findViewById(R.id.btnDate);
+        Button dateButton = (Button) view.findViewById(R.id.btnDate);
         dateButton.setOnClickListener(this);
-        timeButton = (Button) view.findViewById(R.id.btnTime);
+        Button timeButton = (Button) view.findViewById(R.id.btnTime);
         timeButton.setOnClickListener(this);
 
-        spinnerGroups = (MultiSelectionSpinner) view.findViewById(R.id.spinnerGroups);
-        spinnerGroups.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getActivity().getApplicationContext(), "spinnerGroupsClick", Toast.LENGTH_SHORT).show();
-            }
+        //Initialization of the db
+        db = new MySQLiteDB();
+        db.initDb(getActivity().getApplicationContext());
 
+        spinnerGroups = (MultiSelectionSpinner) view.findViewById(R.id.spinnerGroups);
+        spinnerGroups.setItems(db.getMuscleGroups());
+            spinnerExercises = (MultiSelectionSpinner) view.findViewById(R.id.spinnerExercises);
+        spinnerGroups.setOnFinishedListener(new OnFinishedListener() {
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void onFinish() {
+                ArrayList<WorkoutCategory> exercises = new ArrayList<WorkoutCategory>();
+
+                for (String str : spinnerGroups.getResult()) {
+                    String muscleGroupId = db.getMuscleGroupId(str);
+                    exercises.addAll(db.getExercises(muscleGroupId));
+                }
+                spinnerExercises.setItems(exercises);
 
             }
         });
-        spinnerGroups.setItems(data);
-        ArrayList<String> temp = (ArrayList<String>) spinnerGroups.getResult();
-        for(String str : temp){
 
-        }
-        spinnerExercises = (MultiSelectionSpinner) view.findViewById(R.id.spinnerExercises);
-        spinnerExercises.setItems(data);
         return view;
 
     }

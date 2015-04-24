@@ -6,23 +6,22 @@ import android.content.DialogInterface;
 import android.util.AttributeSet;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
+import youngam.bsuir.core.model.WorkoutCategory;
 import youngam.bsuir.listener.OnFinishedListener;
 
 /**
  * Created by Alex on 14.04.2015.
  */
 public class MultiSelectionSpinner extends Spinner implements DialogInterface.OnMultiChoiceClickListener{
-    private String[] items = null;
+    private String[] items;
     private ArrayAdapter<String> adapter;
     // массив для проверки, какие checkboxes нажаты
-    boolean[] selection = null;
-    private OnFinishedListener listener;
+    private boolean[] selection = null;
+    private OnFinishedListener mListener;
 
     public MultiSelectionSpinner(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -32,10 +31,8 @@ public class MultiSelectionSpinner extends Spinner implements DialogInterface.On
         super.setAdapter(adapter);
     }
     //Что именно писать в этом методе?
-    public void setOnFinishedListener(){
-        if(listener != null){
-           listener.onFinish(); ;
-        }
+    public void setOnFinishedListener(OnFinishedListener listener){
+        mListener = listener;
     }
 
 
@@ -70,33 +67,39 @@ public class MultiSelectionSpinner extends Spinner implements DialogInterface.On
                 StringBuilder sb = new StringBuilder();
                 //Достаём информацию из List
 
-                for (String str : getResult()) {
+              /*  for (String str : getResult()) {
                     sb.append(str);
                     sb.append("\n");
                 }
 
-                Toast.makeText(getContext(), "The result is" + sb.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "The result is" + sb.toString(), Toast.LENGTH_SHORT).show();*/
+                mListener.onFinish();
             }
         });
         builder.show();
         return true;
     }
 
-    public void setItems(String[] items) {
-        this.items = items;
+    public void setItems(ArrayList<WorkoutCategory> items) {
+        this.items = new String[items.size()];
+        int i = 0;
+        for(WorkoutCategory category : items) {
+           this.items[i] = category.getName();
+            i++;
+        }
         // размер массива boolean ставим равным размеру items
-        selection = new boolean[items.length];
+        selection = new boolean[items.size()];
         adapter.clear();
         // по умолчанию будет стоять первый элемент массива
-        adapter.add(items[0]);
+        adapter.add(this.items[0]);
         // заполняем весь массив boolean значениями false
         // для удобства
         Arrays.fill(selection, false);
     }
 
     // Тестовый режим, здесь будет идти запрос в базу
-    public List<String> getResult() {
-        List<String> result = new ArrayList<String>();
+    public ArrayList<String> getResult() {
+        ArrayList<String> result = new ArrayList<String>();
         for (int i = 0; i < items.length; ++i) {
             // проверяем, выбран ли элемент
             if (selection[i]) {
