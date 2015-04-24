@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -85,7 +84,15 @@ public class AddingWorkoutFragment extends Fragment implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnAdd:
-                Toast.makeText(getActivity().getApplicationContext(), "Типа добавление записи в бд", Toast.LENGTH_SHORT).show();
+
+                // Добавление в таблицу даты и времени
+                db.addToDate(datePicker.getResult(), timePicker.getResult());
+                String dateId = db.getDateId(datePicker.getResult());
+
+                for(String str : exercisesChoosed) {
+
+                    db.addToUserTrainings(db.getExerciseId(str), dateId);
+                }
                 break;
             case R.id.textTime:
                 showTimePickerDialog();

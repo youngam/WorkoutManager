@@ -49,14 +49,14 @@ public class MySQLiteDB {
     public ArrayList<WorkoutCategory> getMuscleGroups() {
         Cursor cursor = database.query(Tables.TABLE_MUSCLE_GROUPS, null, null,
                 null, null, null, null);
+
         cursor.moveToFirst();
         ArrayList<WorkoutCategory> categories = new ArrayList<>();
-        categories.add(new WorkoutCategory(cursor.getString(cursor.getColumnIndex(Tables.COLUMN_NAME)),
-                cursor.getString(cursor.getColumnIndex(Tables.COLUMN_ID))));
 
-        while (cursor.moveToNext()) {
+        while ( !cursor.isAfterLast()) {
             categories.add(new WorkoutCategory(cursor.getString(cursor.getColumnIndex(Tables.COLUMN_NAME)),
                     cursor.getString(cursor.getColumnIndex(Tables.COLUMN_ID))));
+            cursor.moveToNext();
         }
         cursor.close();
         return categories;
@@ -95,21 +95,19 @@ public class MySQLiteDB {
                 Tables.COLUMN_MUSCLE_ID + "= ?",
                 new String[]{id}, null, null, null);
         cursor.moveToFirst();
+
         ArrayList<WorkoutCategory> exercises = new ArrayList<>();
 
-        System.out.println(cursor.getString(cursor.getColumnIndex(Tables.COLUMN_NAME)));
-
-        exercises.add(new WorkoutCategory(cursor.getString(cursor.getColumnIndex(Tables.COLUMN_NAME)),
-                cursor.getString(cursor.getColumnIndex(Tables.COLUMN_ID))));
-
-        while (cursor.moveToNext()) {
+        while ( !cursor.isAfterLast()) {
             exercises.add(new WorkoutCategory(cursor.getString(cursor.getColumnIndex(Tables.COLUMN_NAME)),
                     cursor.getString(cursor.getColumnIndex(Tables.COLUMN_ID))));
+            cursor.moveToNext();
         }
         cursor.close();
         return exercises;
 
     }
+
     //метод для добавления упражнений для мышечной группы
     //@param exerciseId - указывает, к какой группе мышц относится список упражнений
     public void addToIndividualExerciseDb(String name, String exerciseGroupId, String videoUrl) {
@@ -119,6 +117,18 @@ public class MySQLiteDB {
         values.put(Tables.COLUMN_EXERCISE_ID, exerciseGroupId);
         values.put(Tables.COLUMN_VIDEO_ID, videoUrl);
         database.insert(Tables.TABLE_INDIVIDUAL_EXERCISE, null, values);
+
+    }
+
+    public String getExerciseId(String name){
+        Cursor cursor = database.query(Tables.TABLE_GROUP_EXERCISES, null,
+                Tables.COLUMN_NAME + "= ?",
+                new String[]{name}, null, null, null);
+        cursor.moveToFirst();
+
+        System.out.println(cursor.getString(cursor.getColumnIndex(Tables.COLUMN_ID)));
+
+        return cursor.getString(cursor.getColumnIndex(Tables.COLUMN_ID));
 
     }
 
@@ -138,6 +148,37 @@ public class MySQLiteDB {
 
         cursor.close();
         return exercise;
+
+    }
+
+    public void addToUserTrainings(String exerciseId, String dateId){
+        ContentValues values = new ContentValues();
+        values.put(Tables.COLUMN_TRAINING_ID, exerciseId);
+        values.put(Tables.COLUMN_DATE_ID, dateId);
+        database.insert(Tables.TABLE_USER_TRAININGS, null, values);
+
+    }
+
+    public void getFromUserTrainings(String dateId){
+        Cursor cursor = database.query(Tables.TABLE_USER_TRAININGS, null, Tables.COLUMN_DATE_ID + "= ?",
+                new String[]{dateId}, null, null, null);
+        cursor.close();
+  }
+
+    public void addToDate(String date, String time){
+      ContentValues contentValues = new ContentValues();
+        contentValues.put(Tables.COLUMN_DATE, date);
+        contentValues.put(Tables.COLUMN_TIME, time);
+        database.insert(Tables.TABLE_DATE_TIME, null, contentValues);
+    }
+
+    public String getDateId(String date){
+        Cursor cursor = database.query(Tables.TABLE_DATE_TIME, null, Tables.COLUMN_DATE + "= ?",
+                new String[]{date}, null, null, null);
+        cursor.moveToFirst();
+
+        return cursor.getString(cursor.getColumnIndex(Tables.COLUMN_DATE_ID));
+
 
     }
 

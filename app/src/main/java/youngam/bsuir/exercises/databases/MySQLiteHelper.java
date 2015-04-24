@@ -20,7 +20,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(Tables.CREATE_TABLE_MUSCLE_GROUPS);
         db.execSQL(Tables.CREATE_TABLE_EXERCISES_FOR_GROUPS);
-        db.execSQL(Tables.CREATE_TABLE_INDIVIDUAl_EXERCISE);
+        db.execSQL(Tables.CREATE_TABLE_INDIVIDUAL_EXERCISE);
+        db.execSQL(Tables.CREATE_TABLE_DATE_TIME);
+        db.execSQL(Tables.CREATE_TABLE_USER_TRAININGS);
     }
 
     @Override
