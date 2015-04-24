@@ -11,14 +11,14 @@ import youngam.bsuir.R;
  * Created by Alex on 09.03.2015.
  */
 public class TrainingActivity extends ActionBarActivity{
-    private AddingWorkout addingWorkout;
+    private AddingWorkoutFragment addingWorkout;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.training_layout);
-        addingWorkout = new AddingWorkout();
+        addingWorkout = new AddingWorkoutFragment();
         switchFragment(addingWorkout);
 
 

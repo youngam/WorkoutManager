@@ -6,15 +6,18 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import java.util.Calendar;
+
+import youngam.bsuir.listeners.OnFinishedListener;
 
 /**
  * Created by Alex on 09.04.2015.
  */
 public  class TimePickerFragment extends DialogFragment
         implements TimePickerDialog.OnTimeSetListener {
+    private String result;
+    private OnFinishedListener mListener;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -28,9 +31,20 @@ public  class TimePickerFragment extends DialogFragment
                 DateFormat.is24HourFormat(getActivity()));
     }
 
+    @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         // Do something with the time chosen by the user
-        Toast.makeText(getActivity().getApplicationContext(), "You set the following time "
-                + hourOfDay+":" + minute, Toast.LENGTH_SHORT ).show();
+        result = hourOfDay + " :" + minute;
+        mListener.onFinish();
     }
+
+    public void setOnFinishedListener(OnFinishedListener listener){
+        mListener = listener;
+
+    }
+
+    public String getResult(){
+        return result;
+    }
+
 }
