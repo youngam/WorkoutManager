@@ -1,4 +1,4 @@
-package youngam.bsuir.exercises.parser;
+package youngam.bsuir.exercises.databases;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -17,8 +17,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import youngam.bsuir.core.model.WorkoutCategory;
-import youngam.bsuir.exercises.databases.MySQLiteHelper;
-import youngam.bsuir.exercises.databases.Tables;
 
 
 /**

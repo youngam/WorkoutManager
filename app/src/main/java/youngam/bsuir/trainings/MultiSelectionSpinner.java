@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import youngam.bsuir.core.model.WorkoutCategory;
-import youngam.bsuir.listener.OnFinishedListener;
+import youngam.bsuir.listeners.OnFinishedListener;
 
 /**
  * Created by Alex on 14.04.2015.
@@ -64,15 +64,7 @@ public class MultiSelectionSpinner extends Spinner implements DialogInterface.On
             @Override
             //Вот нажатие, после которого должно идти заполнение второго спинера
             public void onClick(DialogInterface dialog, int which) {
-                StringBuilder sb = new StringBuilder();
-                //Достаём информацию из List
 
-              /*  for (String str : getResult()) {
-                    sb.append(str);
-                    sb.append("\n");
-                }
-
-                Toast.makeText(getContext(), "The result is" + sb.toString(), Toast.LENGTH_SHORT).show();*/
                 mListener.onFinish();
             }
         });

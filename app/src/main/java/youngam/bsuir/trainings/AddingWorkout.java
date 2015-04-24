@@ -1,6 +1,5 @@
 package youngam.bsuir.trainings;
 
-import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,16 +13,20 @@ import java.util.ArrayList;
 
 import youngam.bsuir.R;
 import youngam.bsuir.core.model.WorkoutCategory;
-import youngam.bsuir.exercises.parser.MySQLiteDB;
-import youngam.bsuir.listener.OnFinishedListener;
+import youngam.bsuir.exercises.databases.MySQLiteDB;
+import youngam.bsuir.listeners.OnFinishedListener;
+import youngam.bsuir.trainings.pickers.DatePickerFragment;
+import youngam.bsuir.trainings.pickers.TimePickerFragment;
 
 /**
  * Created by Alex on 15.04.2015.
  */
 public class AddingWorkout extends Fragment implements View.OnClickListener {
     private MySQLiteDB db;
-    private DialogFragment dialogFragment;
     private MultiSelectionSpinner spinnerGroups, spinnerExercises;
+    private ArrayList<String> exercisesChoosed;
+    private DatePickerFragment datePicker;
+    private TimePickerFragment timePicker;
 
         @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -44,6 +47,8 @@ public class AddingWorkout extends Fragment implements View.OnClickListener {
         spinnerGroups = (MultiSelectionSpinner) view.findViewById(R.id.spinnerGroups);
         spinnerGroups.setItems(db.getMuscleGroups());
             spinnerExercises = (MultiSelectionSpinner) view.findViewById(R.id.spinnerExercises);
+
+        // Need to fill second spinner, when the first clicked.
         spinnerGroups.setOnFinishedListener(new OnFinishedListener() {
             @Override
             public void onFinish() {
@@ -55,8 +60,19 @@ public class AddingWorkout extends Fragment implements View.OnClickListener {
                 }
                 spinnerExercises.setItems(exercises);
 
+
             }
         });
+            spinnerExercises.setOnFinishedListener(new OnFinishedListener() {
+                @Override
+                public void onFinish() {
+                    exercisesChoosed = new ArrayList<String>();
+                    for(String str : spinnerExercises.getResult()){
+                      exercisesChoosed.add(str);
+
+                    }
+                }
+            });
 
         return view;
 
@@ -69,10 +85,11 @@ public class AddingWorkout extends Fragment implements View.OnClickListener {
                 Toast.makeText(getActivity().getApplicationContext(), "Типа добавление записи в бд", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btnTime:
-                ((TrainingActivity)getActivity()).showTimePickerDialog();
+                //showTimePickerDialog();
+
                 break;
             case R.id.btnDate:
-                ((TrainingActivity)getActivity()).showDatePickerDialog();
+                showDatePickerDialog();
                 break;
 
         }
@@ -86,6 +103,22 @@ public class AddingWorkout extends Fragment implements View.OnClickListener {
         ArrayList<WorkoutCategory> exercises = db.getExercises(id);
         return exercises;
 
+    }
+    public void showDatePickerDialog() {
+        datePicker = new DatePickerFragment();
+        datePicker.show(getActivity().getFragmentManager(), "datePicker");
+        datePicker.setOnFinishedListener(new OnFinishedListener() {
+            @Override
+            public void onFinish() {
+                // Here I can get information from DatePickerDialog
+
+            }
+        });
+    }
+
+    public void showTimePickerDialog() {
+        timePicker = new TimePickerFragment();
+        timePicker.show(getActivity().getFragmentManager(), "timePicker");
     }
 
 

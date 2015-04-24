@@ -1,4 +1,4 @@
-package youngam.bsuir.listener;
+package youngam.bsuir.listeners;
 
 import android.support.v4.app.Fragment;
 

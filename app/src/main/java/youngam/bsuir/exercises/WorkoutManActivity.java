@@ -10,8 +10,8 @@ import java.util.ArrayList;
 
 import youngam.bsuir.R;
 import youngam.bsuir.core.model.WorkoutCategory;
-import youngam.bsuir.listener.SwitchFragmentListener;
-import youngam.bsuir.exercises.parser.MySQLiteDB;
+import youngam.bsuir.listeners.SwitchFragmentListener;
+import youngam.bsuir.exercises.databases.MySQLiteDB;
 
 /**
  * Created by Alex on 09.03.2015.

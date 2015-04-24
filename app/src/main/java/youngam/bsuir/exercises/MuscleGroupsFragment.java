@@ -17,8 +17,8 @@ import java.util.ArrayList;
 import youngam.bsuir.R;
 import youngam.bsuir.adapter.MyAdapter;
 import youngam.bsuir.core.model.WorkoutCategory;
-import youngam.bsuir.listener.SwitchFragmentListener;
-import youngam.bsuir.exercises.parser.MySQLiteDB;
+import youngam.bsuir.listeners.SwitchFragmentListener;
+import youngam.bsuir.exercises.databases.MySQLiteDB;
 
 
 public class MuscleGroupsFragment extends ListFragment {
