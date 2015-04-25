@@ -12,6 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import youngam.bsuir.R;
+import youngam.bsuir.core.model.DateTime;
 import youngam.bsuir.core.model.WorkoutCategory;
 import youngam.bsuir.exercises.databases.MySQLiteDB;
 import youngam.bsuir.listeners.OnFinishedListener;
@@ -86,7 +87,7 @@ public class AddingWorkoutFragment extends Fragment implements View.OnClickListe
             case R.id.btnAdd:
 
                 // Добавление в таблицу даты и времени
-                db.addToDate(datePicker.getResult(), timePicker.getResult());
+                db.addToDate(new DateTime(datePicker.getResult(), timePicker.getResult()));
                 String dateId = db.getDateId(datePicker.getResult());
 
                 for(String str : exercisesChoosed) {
@@ -109,6 +110,8 @@ public class AddingWorkoutFragment extends Fragment implements View.OnClickListe
         db = new MySQLiteDB();
         db.initDb(getActivity().getApplicationContext());
     }
+
+    //FIXME: пересмотреть класс выборки из базы даныых MySQLiteDB
 
     public ArrayList<WorkoutCategory> getExercise(String muscleGroup) {
         String id = db.getMuscleGroupId(muscleGroup);

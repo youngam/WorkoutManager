@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import youngam.bsuir.core.model.DateTime;
 import youngam.bsuir.core.model.WorkoutCategory;
 
 
@@ -159,16 +160,24 @@ public class MySQLiteDB {
 
     }
 
-    public void getFromUserTrainings(String dateId){
+    public ArrayList<Integer> getFromUserTrainings(String dateId){
+
+        //TODO дописать этот метод, глянуть остальные в этом классе
         Cursor cursor = database.query(Tables.TABLE_USER_TRAININGS, null, Tables.COLUMN_DATE_ID + "= ?",
                 new String[]{dateId}, null, null, null);
+        while ( !cursor.isAfterLast()) {
+ /*           exercisesId.add(cursor.getString(cursor.getColumnIndex(Tables.COLUMN_NAME)),
+                    cursor.getString(cursor.getColumnIndex(Tables.COLUMN_ID))));*/
+            cursor.moveToNext();
+        }
         cursor.close();
+        return null;
   }
 
-    public void addToDate(String date, String time){
+    public void addToDate(DateTime dateTime){
       ContentValues contentValues = new ContentValues();
-        contentValues.put(Tables.COLUMN_DATE, date);
-        contentValues.put(Tables.COLUMN_TIME, time);
+        contentValues.put(Tables.COLUMN_DATE, dateTime.getDate());
+        contentValues.put(Tables.COLUMN_TIME, dateTime.getTime());
         database.insert(Tables.TABLE_DATE_TIME, null, contentValues);
     }
 

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <ExpandableListView
+        android:layout_width="match_parent"
+        android:layout_height="374dp"
+        android:id="@+id/expandableListView"
+        android:layout_weight="0.77" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/blue_button"
+        android:textColor="#FFFFFF"
+        android:text="Add training"
+        android:id="@+id/button2"
+        android:layout_gravity="right" />
+</LinearLayout>
