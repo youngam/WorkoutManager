@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import youngam.bsuir.exercises.WorkoutManActivity;
-import youngam.bsuir.exercises.databases.MySQLiteDB;
+import youngam.bsuir.databases.MySQLiteDB;
 import youngam.bsuir.trainings.TrainingActivity;
 
 

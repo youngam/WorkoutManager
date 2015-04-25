@@ -6,11 +6,13 @@ package youngam.bsuir.core.model;
 public class UserTrainings {
     private String date;
     private String dateId;
+    private String time;
     private String exerciseName;
     private String exerciseId;
 
-    public UserTrainings(String date, String dateId, String exerciseName, String exerciseId){
+    public UserTrainings(String date, String time, String dateId, String exerciseName, String exerciseId){
         this.date = date;
+        this.time = time;
         this.dateId = dateId;
         this.exerciseName = exerciseName;
         this.exerciseId = exerciseId;

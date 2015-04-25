@@ -3,6 +3,7 @@ package youngam.bsuir.trainings;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import youngam.bsuir.R;
 import youngam.bsuir.core.model.DateTime;
 import youngam.bsuir.core.model.WorkoutCategory;
-import youngam.bsuir.exercises.databases.MySQLiteDB;
+import youngam.bsuir.databases.MySQLiteDB;
 import youngam.bsuir.listeners.OnFinishedListener;
 import youngam.bsuir.trainings.pickers.DatePickerFragment;
 import youngam.bsuir.trainings.pickers.TimePickerFragment;
@@ -25,7 +26,7 @@ import youngam.bsuir.trainings.pickers.TimePickerFragment;
 public class AddingWorkoutFragment extends Fragment implements View.OnClickListener {
     private MySQLiteDB db;
     private MultiSelectionSpinner spinnerGroups, spinnerExercises;
-    private ArrayList<String> exercisesChoosed;
+    private ArrayList<WorkoutCategory> exercisesChose;
     private DatePickerFragment datePicker;
     private TimePickerFragment timePicker;
     private TextView textTime;
@@ -57,9 +58,9 @@ public class AddingWorkoutFragment extends Fragment implements View.OnClickListe
             public void onFinish() {
                 ArrayList<WorkoutCategory> exercises = new ArrayList<WorkoutCategory>();
 
-                for (String str : spinnerGroups.getResult()) {
-                    String muscleGroupId = db.getMuscleGroupId(str);
-                    exercises.addAll(db.getExercises(muscleGroupId));
+
+                for (WorkoutCategory category : spinnerGroups.getResult()) {
+                    exercises.addAll(db.getExercises(category.getId()));
                 }
                 spinnerExercises.setItems(exercises);
 
@@ -69,11 +70,9 @@ public class AddingWorkoutFragment extends Fragment implements View.OnClickListe
         spinnerExercises.setOnFinishedListener(new OnFinishedListener() {
             @Override
             public void onFinish() {
-                exercisesChoosed = new ArrayList<String>();
-                for (String str : spinnerExercises.getResult()) {
-                    exercisesChoosed.add(str);
+                exercisesChose = new ArrayList<WorkoutCategory>();
+                exercisesChose = spinnerExercises.getResult();
 
-                }
             }
         });
 
@@ -88,11 +87,12 @@ public class AddingWorkoutFragment extends Fragment implements View.OnClickListe
 
                 // Добавление в таблицу даты и времени
                 db.addToDate(new DateTime(datePicker.getResult(), timePicker.getResult()));
-                String dateId = db.getDateId(datePicker.getResult());
+                DateTime currentDate = db.getDate(datePicker.getResult());
 
-                for(String str : exercisesChoosed) {
+                for(WorkoutCategory category : exercisesChose) {
 
-                    db.addToUserTrainings(db.getExerciseId(str), dateId);
+                    db.addToUserTrainings(category.getId(), currentDate.getId());
+                    Log.d("DEBUG", "exerciseId: " + category.getId() +  "dateId: " +currentDate.getId());
                 }
                 break;
             case R.id.textTime:
@@ -106,19 +106,6 @@ public class AddingWorkoutFragment extends Fragment implements View.OnClickListe
         }
     }
 
-    public void initDb() {
-        db = new MySQLiteDB();
-        db.initDb(getActivity().getApplicationContext());
-    }
-
-    //FIXME: пересмотреть класс выборки из базы даныых MySQLiteDB
-
-    public ArrayList<WorkoutCategory> getExercise(String muscleGroup) {
-        String id = db.getMuscleGroupId(muscleGroup);
-        ArrayList<WorkoutCategory> exercises = db.getExercises(id);
-        return exercises;
-
-    }
 
     public void showDatePickerDialog() {
         datePicker = new DatePickerFragment();

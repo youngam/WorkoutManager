@@ -16,6 +16,6 @@
         android:background="@drawable/blue_button"
         android:textColor="#FFFFFF"
         android:text="Add training"
-        android:id="@+id/button2"
+        android:id="@+id/bttnAddTraining"
         android:layout_gravity="right" />
 </LinearLayout>

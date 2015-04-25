@@ -6,11 +6,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 
 import youngam.bsuir.R;
+import youngam.bsuir.listeners.SwitchFragmentListener;
 
 /**
  * Created by Alex on 09.03.2015.
  */
-public class TrainingActivity extends ActionBarActivity{
+public class TrainingActivity extends ActionBarActivity implements SwitchFragmentListener {
     private ListOfTrainingsFragment fragment;
 
     @Override
@@ -18,19 +19,21 @@ public class TrainingActivity extends ActionBarActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.training_layout);
         fragment = new ListOfTrainingsFragment();
-        switchFragment(fragment);
+        switchFragment(fragment, false);
 
 
     }
 
 
-
-
-
-    public void switchFragment(Fragment fragment) {
+    //@param addToBackStack need to prevent the bag when back key pressed
+    // and you didn't go back to mainActivity
+    @Override
+    public void switchFragment(Fragment fragment, boolean addToBackStack) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.pager, fragment).commit();
-
+        if (addToBackStack) {
+            fragmentManager.beginTransaction().replace(R.id.pager, fragment).addToBackStack(null).commit();
+        } else {
+            fragmentManager.beginTransaction().replace(R.id.pager, fragment).commit();
+        }
     }
-
 }

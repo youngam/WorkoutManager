@@ -1,4 +1,4 @@
-package youngam.bsuir.exercises.databases;
+package youngam.bsuir.databases;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

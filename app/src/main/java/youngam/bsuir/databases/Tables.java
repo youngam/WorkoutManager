@@ -1,4 +1,4 @@
-package youngam.bsuir.exercises.databases;
+package youngam.bsuir.databases;
 
 /**
  * Created by Alex on 02.04.2015.

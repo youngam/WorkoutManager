@@ -18,6 +18,7 @@ import youngam.bsuir.listeners.OnFinishedListener;
  */
 public class MultiSelectionSpinner extends Spinner implements DialogInterface.OnMultiChoiceClickListener{
     private String[] items;
+    private ArrayList<WorkoutCategory> categories;
     private ArrayAdapter<String> adapter;
     // массив для проверки, какие checkboxes нажаты
     private boolean[] selection = null;
@@ -28,6 +29,7 @@ public class MultiSelectionSpinner extends Spinner implements DialogInterface.On
         //Инициализируем адаптер и передаём спинеру
         adapter = new ArrayAdapter<>(context,
                 android.R.layout.simple_spinner_item);
+        categories = new ArrayList<>();
         super.setAdapter(adapter);
     }
     //Что именно писать в этом методе?
@@ -73,6 +75,7 @@ public class MultiSelectionSpinner extends Spinner implements DialogInterface.On
     }
 
     public void setItems(ArrayList<WorkoutCategory> items) {
+        categories = items;
         this.items = new String[items.size()];
         int i = 0;
         for(WorkoutCategory category : items) {
@@ -90,13 +93,13 @@ public class MultiSelectionSpinner extends Spinner implements DialogInterface.On
     }
 
     // Тестовый режим, здесь будет идти запрос в базу
-    public ArrayList<String> getResult() {
-        ArrayList<String> result = new ArrayList<String>();
+    public ArrayList<WorkoutCategory> getResult() {
+        ArrayList<WorkoutCategory> result = new ArrayList<WorkoutCategory>();
         for (int i = 0; i < items.length; ++i) {
             // проверяем, выбран ли элемент
             if (selection[i]) {
                 //Добавляем элемент
-                result.add(items[i]);
+                result.add(categories.get(i));
             }
         }
         return result;
