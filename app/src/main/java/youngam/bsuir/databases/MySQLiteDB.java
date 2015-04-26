@@ -38,7 +38,7 @@ public class MySQLiteDB {
     //Проверяем, если бд не пустая, то её не надо заполнять
     public boolean isEmpty() {
 
-        return !database.query(Tables.TABLE_MUSCLE_GROUPS, null, null, null, null, null, null).moveToFirst() ;
+        return !database.query(Tables.TABLE_MUSCLE_GROUPS, null, null, null, null, null, null).moveToFirst();
     }
 
 
@@ -153,24 +153,33 @@ public class MySQLiteDB {
     public ArrayList<UserTrainings> getUserTrainings(String date) {
 
         ArrayList<UserTrainings> trainings = new ArrayList<>();
-        DateTime currentDate = getDate(date);
+        DateTime currentDate = null;
+        if(getDate(date) != null) {
+            currentDate = getDate(date);
+        }else
+        {
+            return null;
+        }
+
         Cursor cursor = database.query(Tables.TABLE_USER_TRAININGS, null, Tables.COLUMN_DATE_ID + "= ?",
-                new String[] {currentDate.getId()}, null, null, null);
+                new String[]{currentDate.getId()}, null, null, null);
 
         cursor.moveToFirst();
-        Log.d("DEBUG", "exerciseId: " +cursor.getString(cursor.getColumnIndex(Tables.COLUMN_DATE_ID)));
+        Log.d("DEBUG", "exerciseId: " + cursor.getString(cursor.getColumnIndex(Tables.COLUMN_DATE_ID)));
 
 
-        while (!cursor.isAfterLast()) {
+            while (!cursor.isAfterLast()) {
 
-            //Get exercise from ExerciseTable
+                //Get exercise from ExerciseTable
 
-             WorkoutCategory exercise = getExercise(cursor.getString(cursor.getColumnIndex(Tables.COLUMN_TRAINING_ID)));
+                WorkoutCategory exercise = getExercise(cursor.getString(cursor.getColumnIndex(Tables.COLUMN_TRAINING_ID)));
 
-             trainings.add(new UserTrainings(currentDate.getDate(), currentDate.getTime(),currentDate.getId(), exercise.getName(), exercise.getId()));
+                trainings.add(new UserTrainings(currentDate.getDate(), currentDate.getTime(), currentDate.getId(), exercise.getName(), exercise.getId()));
 
-            cursor.moveToNext();
-        }
+                cursor.moveToNext();
+            }
+
+
 
 
         cursor.close();
@@ -188,10 +197,16 @@ public class MySQLiteDB {
         Cursor cursor = database.query(Tables.TABLE_DATE_TIME, null, Tables.COLUMN_DATE + "= ?",
                 new String[]{date}, null, null, null);
         cursor.moveToFirst();
+        try{cursor.getString(cursor.getColumnIndex(Tables.COLUMN_DATE_ID))
+        ;}
+        catch (Exception e){
+            return null;
+        }
 
         return new DateTime(cursor.getString(cursor.getColumnIndex(Tables.COLUMN_DATE_ID)),
                 cursor.getString(cursor.getColumnIndex(Tables.COLUMN_DATE)),
                 cursor.getString(cursor.getColumnIndex(Tables.COLUMN_TIME)));
+
 
     }
 

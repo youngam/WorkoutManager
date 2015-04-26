@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -30,6 +31,7 @@ public class ListOfTrainingsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.list_of_trainings, container, false);
+        TextView textView = (TextView) view.findViewById(R.id.txtDate);
 
         db = new MySQLiteDB();
         db.initDb(getActivity().getApplicationContext());
@@ -38,7 +40,15 @@ public class ListOfTrainingsFragment extends Fragment {
         now.setToNow();
         String currentDate  =  now.monthDay + "." + now.month + "." + now.year;
         Log.d("DEBUG", now.monthDay + "." + now.month + "." + now.year);
-        trainings = db.getUserTrainings(currentDate);
+            if(db.getUserTrainings(currentDate) != null) {
+                textView.setText(currentDate);
+                trainings = db.getUserTrainings(currentDate);
+            }else {
+                textView.setText("Выходной");
+                
+            }
+
+
 
 
 
