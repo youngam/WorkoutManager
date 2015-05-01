@@ -7,8 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import youngam.bsuir.exercises.WorkoutManActivity;
 import youngam.bsuir.databases.MySQLiteDB;
+import youngam.bsuir.exercises.WorkoutManActivity;
 import youngam.bsuir.trainings.TrainingActivity;
 
 
@@ -19,6 +19,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mBtnMan = (Button) findViewById(R.id.manButton);

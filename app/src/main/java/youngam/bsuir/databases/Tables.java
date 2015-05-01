@@ -42,11 +42,10 @@ public class Tables {
     //Table for date and time
 
     public static final String TABLE_DATE_TIME = "dateTime";
-    public static final String COLUMN_TIME = "time";
     public static final String COLUMN_DATE = "date";
     public static final String CREATE_TABLE_DATE_TIME =
             "CREATE TABLE " + TABLE_DATE_TIME  + " ("+ COLUMN_DATE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + COLUMN_DATE + " TEXT NOT NULL, " + COLUMN_TIME + " TEXT NOT NULL);";
+            + COLUMN_DATE + " INTEGER NOT NULL);";
 
 
 

@@ -7,9 +7,11 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import youngam.bsuir.R;
+import youngam.bsuir.core.model.MyCalendar;
 import youngam.bsuir.core.model.UserTrainings;
 
 /**
@@ -17,11 +19,9 @@ import youngam.bsuir.core.model.UserTrainings;
  */
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private ArrayList<UserTrainings> groups;
-    private String[][] children;
 
-    public ExpandableListAdapter(ArrayList<UserTrainings> groups, String[][] children){
+    public ExpandableListAdapter(ArrayList<UserTrainings> groups){
         this.groups = groups;
-        this.children = children;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return children[groupPosition].length;
+        return groups.get(groupPosition).getExercises().size();
     }
 
     @Override
@@ -41,7 +41,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return children[groupPosition][childPosition];
+        return groups.get(groupPosition);
     }
 
     @Override
@@ -72,8 +72,16 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         } else{
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.text.setText(groups.get(groupPosition).getExerciseName());
-        holder.date.setText(groups.get(groupPosition).getDate());
+        holder.text.setText(groups.get(groupPosition).getMuscleGroups());
+        String text = null;
+
+        //Convert time from milliseconds to humans letters
+        try {
+             text = MyCalendar.getTime(groups.get(groupPosition).getDate());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        holder.date.setText(text);
     return convertView;
 
     }
@@ -92,7 +100,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.text.setText(getChild(groupPosition, childPosition).toString());
+        //Getting the exercises for muscleGroups
+        holder.text.setText(groups.get(groupPosition).getExercises().get(childPosition).getName());
 
         return convertView;
     }

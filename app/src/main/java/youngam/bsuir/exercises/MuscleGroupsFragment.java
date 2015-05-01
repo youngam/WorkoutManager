@@ -6,8 +6,6 @@ import android.support.v4.app.ListFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -17,12 +15,11 @@ import java.util.ArrayList;
 import youngam.bsuir.R;
 import youngam.bsuir.adapter.MyAdapter;
 import youngam.bsuir.core.model.WorkoutCategory;
-import youngam.bsuir.listeners.SwitchFragmentListener;
 import youngam.bsuir.databases.MySQLiteDB;
+import youngam.bsuir.listeners.SwitchFragmentListener;
 
 
 public class MuscleGroupsFragment extends ListFragment {
-    private final String[] muscleGroups = {"Ноги", "Спина", "Грудь", "Дельты", "Бицепс", "Трицепс"};
     private ArrayList<WorkoutCategory> mCategories;
     private final static String LOG_TAG = MuscleGroupsFragment.class.getSimpleName();
     private MySQLiteDB db;
@@ -31,7 +28,11 @@ public class MuscleGroupsFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d(LOG_TAG, "onCreateView()");
+        try {
+            ((ActionBarActivity) getActivity()).getSupportActionBar().setTitle("Группы мышц:");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         View view = inflater.inflate(R.layout.list_view_fragment, container, false);
        // db.initDb(getActivity().getApplicationContext());
         //fill list
@@ -46,15 +47,7 @@ public class MuscleGroupsFragment extends ListFragment {
     }
 
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        try {
-            ((ActionBarActivity) getActivity()).getSupportActionBar().setTitle("Список упражнений");
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
+
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {

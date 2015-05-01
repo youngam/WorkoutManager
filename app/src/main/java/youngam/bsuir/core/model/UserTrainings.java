@@ -1,23 +1,34 @@
 package youngam.bsuir.core.model;
 
+import java.util.ArrayList;
+import java.util.Set;
+
 /**
  * Created by Alex on 25.04.2015.
  */
 public class UserTrainings {
-    private String date;
+    private long date;
     private String dateId;
-    private String time;
-    private String exerciseName;
-    private String exerciseId;
+    private Set <String> muscleGroups;
+    private ArrayList<WorkoutCategory> exercises;
 
-    public UserTrainings(String date, String time, String dateId, String exerciseName, String exerciseId){
+
+    public UserTrainings(long date, String dateId, Set <String> muscleGroups, ArrayList<WorkoutCategory> exercises){
         this.date = date;
-        this.time = time;
         this.dateId = dateId;
-        this.exerciseName = exerciseName;
-        this.exerciseId = exerciseId;
+        this.muscleGroups = muscleGroups;
+        this.exercises = exercises;
 
     }
+
+    public long getDate() {
+        return date;
+    }
+
+    public void setDate(long date) {
+        this.date = date;
+    }
+
     public String getDateId() {
         return dateId;
     }
@@ -26,29 +37,32 @@ public class UserTrainings {
         this.dateId = dateId;
     }
 
-    public String getExerciseName() {
-        return exerciseName;
+    public String getMuscleGroups() {
+        StringBuilder result = new StringBuilder();
+        for(String s : muscleGroups ){
+            result.append(s);
+            result.append(", ");
+        }
+
+        // delete the last comma
+        result.delete(result.length() - 2, result.length() - 1);
+        return result.toString();
     }
 
-    public void setExerciseName(String exerciseName) {
-        this.exerciseName = exerciseName;
+    public void setMuscleGroups(Set<String> muscleGroups) {
+        this.muscleGroups = muscleGroups;
     }
 
-    public String getExerciseId() {
-        return exerciseId;
+    public ArrayList<WorkoutCategory> getExercises() {
+       /* StringBuilder result = new StringBuilder();
+        for(WorkoutCategory category : exercises){
+            result.append(category.getName());
+            result.append("\n");
+        }*/
+        return exercises;
     }
 
-    public void setExerciseId(String exerciseId) {
-        this.exerciseId = exerciseId;
+    public void setExercises(ArrayList<WorkoutCategory> exercises) {
+        this.exercises = exercises;
     }
-
-    public String getDate() {
-
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
 }

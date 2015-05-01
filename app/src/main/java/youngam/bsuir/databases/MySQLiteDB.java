@@ -13,11 +13,14 @@ import org.w3c.dom.NodeList;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import youngam.bsuir.core.model.DateTime;
+import youngam.bsuir.core.model.Date;
+import youngam.bsuir.core.model.MyCalendar;
 import youngam.bsuir.core.model.UserTrainings;
 import youngam.bsuir.core.model.WorkoutCategory;
 
@@ -27,7 +30,7 @@ import youngam.bsuir.core.model.WorkoutCategory;
  */
 public class MySQLiteDB {
     private SQLiteDatabase database;
-    private MySQLiteHelper dbHelper;
+    private MySQLiteHelper dbHelper;;
 
     //инициализируем компоненты бд
     public void initDb(Context context) {
@@ -67,6 +70,18 @@ public class MySQLiteDB {
         return categories;
     }
 
+    public String getMuscleGroupName(String groupId){
+
+        Cursor cursor = database.query(Tables.TABLE_MUSCLE_GROUPS, null, Tables.COLUMN_ID + "= ?",
+                new String[]{groupId}, null, null, null);
+
+        cursor.moveToFirst();
+
+
+        return  cursor.getString(cursor.getColumnIndex(Tables.COLUMN_NAME));
+
+    }
+
     //метод для добавления упражнений для мышечной группы
     //@param groupId - указывает, к какой группе мышц относится список упражнений
 
@@ -79,37 +94,7 @@ public class MySQLiteDB {
 
     }
 
-    public ArrayList<WorkoutCategory> getExercises(String groupId) {
 
-        //Достаём только те записи, где muscleId == id.
-
-        Cursor cursor = database.query(Tables.TABLE_GROUP_EXERCISES, null,
-                Tables.COLUMN_MUSCLE_ID + "= ?",
-                new String[]{groupId}, null, null, null);
-        cursor.moveToFirst();
-
-        ArrayList<WorkoutCategory> exercises = new ArrayList<>();
-
-        while (!cursor.isAfterLast()) {
-            exercises.add(new WorkoutCategory(cursor.getString(cursor.getColumnIndex(Tables.COLUMN_NAME)),
-                    cursor.getString(cursor.getColumnIndex(Tables.COLUMN_ID))));
-            cursor.moveToNext();
-        }
-        cursor.close();
-        return exercises;
-
-    }
-
-    public WorkoutCategory getExercise(String exerciseId) {
-        Cursor cursor = database.query(Tables.TABLE_GROUP_EXERCISES, null,
-                Tables.COLUMN_ID + "= ?",
-                new String[]{exerciseId}, null, null, null);
-        cursor.moveToFirst();
-
-        return new WorkoutCategory(cursor.getString(cursor.getColumnIndex(Tables.COLUMN_NAME)),
-                cursor.getString(cursor.getColumnIndex(Tables.COLUMN_ID)));
-
-    }
 
     //метод для добавления упражнений для мышечной группы
     //@param exerciseId - указывает, к какой группе мышц относится список упражнений
@@ -150,63 +135,115 @@ public class MySQLiteDB {
 
     }
 
-    public ArrayList<UserTrainings> getUserTrainings(String date) {
+    public ArrayList<UserTrainings> getUserTrainings(long date) {
 
-        ArrayList<UserTrainings> trainings = new ArrayList<>();
-        DateTime currentDate = null;
-        if(getDate(date) != null) {
-            currentDate = getDate(date);
-        }else
-        {
-            return null;
+        //FIXME : exercises are adding with repetition
+
+        // Adding exercises, which user should do at this date
+        ArrayList<UserTrainings> mExercises =  new ArrayList<>();
+
+         for(Date listOfDates : getDates(date)){
+
+             //I'm using  HashSet because I need to avoid repetition of names
+             Set<String> groupName = new HashSet<>();
+              ArrayList<WorkoutCategory> categories = getExercisesUserTrainings(listOfDates.getId());
+
+             for(WorkoutCategory category : categories) {
+                 groupName.add(category.getParentName());
+             }
+
+
+
+             mExercises.add(new UserTrainings(listOfDates.getDate(),listOfDates.getId(), groupName, categories));
+             categories = null;
+
         }
 
-        Cursor cursor = database.query(Tables.TABLE_USER_TRAININGS, null, Tables.COLUMN_DATE_ID + "= ?",
-                new String[]{currentDate.getId()}, null, null, null);
+        return mExercises;
+    }
+    public ArrayList<WorkoutCategory> getExercises(String groupId) {
 
+        //Достаём только те записи, где muscleId == id.
+
+        Cursor cursor = database.query(Tables.TABLE_GROUP_EXERCISES, null,
+                Tables.COLUMN_MUSCLE_ID + "= ?",
+                new String[]{groupId}, null, null, null);
         cursor.moveToFirst();
-        Log.d("DEBUG", "exerciseId: " + cursor.getString(cursor.getColumnIndex(Tables.COLUMN_DATE_ID)));
 
+        ArrayList<WorkoutCategory> exercises = new ArrayList<>();
 
-            while (!cursor.isAfterLast()) {
-
-                //Get exercise from ExerciseTable
-
-                WorkoutCategory exercise = getExercise(cursor.getString(cursor.getColumnIndex(Tables.COLUMN_TRAINING_ID)));
-
-                trainings.add(new UserTrainings(currentDate.getDate(), currentDate.getTime(), currentDate.getId(), exercise.getName(), exercise.getId()));
-
-                cursor.moveToNext();
-            }
-
-
-
-
+        while (!cursor.isAfterLast()) {
+            exercises.add(new WorkoutCategory(cursor.getString(cursor.getColumnIndex(Tables.COLUMN_NAME)),
+                    cursor.getString(cursor.getColumnIndex(Tables.COLUMN_ID))));
+            cursor.moveToNext();
+        }
         cursor.close();
-        return trainings;
+        return exercises;
+
     }
 
-    public void addToDate(DateTime dateTime) {
+    public WorkoutCategory getExerciseFromGroupExercises(String exerciseId){
+        Cursor cursor = database.query(Tables.TABLE_GROUP_EXERCISES, null,
+                Tables.COLUMN_ID + "= ?",
+                new String[]{exerciseId}, null, null, null);
+        cursor.moveToFirst();
+        Log.d("GetExercise", cursor.getString(cursor.getColumnIndex(Tables.COLUMN_NAME)));
+
+        return new WorkoutCategory(cursor.getString(cursor.getColumnIndex(Tables.COLUMN_NAME)),
+                cursor.getString(cursor.getColumnIndex(Tables.COLUMN_ID)),
+                getMuscleGroupName(cursor.getString(cursor.getColumnIndex(Tables.COLUMN_MUSCLE_ID)))) ;
+
+    }
+
+    public ArrayList<WorkoutCategory> getExercisesUserTrainings(String dateId) {
+        Cursor cursor = database.query(Tables.TABLE_USER_TRAININGS, null,
+                Tables.COLUMN_DATE_ID + "= ?",
+                new String[]{dateId}, null, null, null);
+        cursor.moveToFirst();
+        ArrayList<WorkoutCategory> categories = new ArrayList<>();
+
+        while(!cursor.isAfterLast()){
+            categories.add(getExerciseFromGroupExercises(cursor.getString(cursor.getColumnIndex(Tables.COLUMN_TRAINING_ID))));
+            cursor.moveToNext();
+        }
+        return categories;
+
+    }
+
+
+
+
+    public void addToDate(long milliseconds) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(Tables.COLUMN_DATE, dateTime.getDate());
-        contentValues.put(Tables.COLUMN_TIME, dateTime.getTime());
+        contentValues.put(Tables.COLUMN_DATE, milliseconds);
         database.insert(Tables.TABLE_DATE_TIME, null, contentValues);
     }
+    public ArrayList<Date> getDates(long date) {
+        // end of the day in milliseconds
+        ArrayList<Date> dates = new ArrayList<>();
+        long nextDay = date + MyCalendar.MILLISECONDS_IN_DAY;
 
-    public DateTime getDate(String date) {
-        Cursor cursor = database.query(Tables.TABLE_DATE_TIME, null, Tables.COLUMN_DATE + "= ?",
-                new String[]{date}, null, null, null);
+        // Choose date which are in interval of this day
+        Cursor cursor = database.query(Tables.TABLE_DATE_TIME, null, Tables.COLUMN_DATE + " < ?"+ " AND " + Tables.COLUMN_DATE + " > ?",
+                new String[] {String.valueOf(nextDay), String.valueOf(date)}, null, null, null);
+
         cursor.moveToFirst();
-        try{cursor.getString(cursor.getColumnIndex(Tables.COLUMN_DATE_ID))
-        ;}
-        catch (Exception e){
-            return null;
+        while (!cursor.isAfterLast()){
+            dates.add(new Date(Long.parseLong(cursor.getString(cursor.getColumnIndex(Tables.COLUMN_DATE))),
+                    cursor.getString(cursor.getColumnIndex(Tables.COLUMN_DATE_ID))));
+            cursor.moveToNext();
         }
 
-        return new DateTime(cursor.getString(cursor.getColumnIndex(Tables.COLUMN_DATE_ID)),
-                cursor.getString(cursor.getColumnIndex(Tables.COLUMN_DATE)),
-                cursor.getString(cursor.getColumnIndex(Tables.COLUMN_TIME)));
+        return dates;
 
+
+    }
+
+    public String getDateId(long date){
+        Cursor cursor = database.query(Tables.TABLE_DATE_TIME, null, Tables.COLUMN_DATE + " = ?",
+                new String[] {String.valueOf(date)}, null, null, null);
+        cursor.moveToFirst();
+        return cursor.getString(cursor.getColumnIndex(Tables.COLUMN_DATE_ID));
 
     }
 

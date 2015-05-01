@@ -9,31 +9,30 @@ import youngam.bsuir.R;
 import youngam.bsuir.listeners.SwitchFragmentListener;
 
 /**
- * Created by Alex on 09.03.2015.
+ * Created by Alex on 29.04.2015.
  */
 public class TrainingActivity extends ActionBarActivity implements SwitchFragmentListener {
-    private ListOfTrainingsFragment fragment;
+    private TrainingFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.training_layout);
-        fragment = new ListOfTrainingsFragment();
+        fragment = new TrainingFragment();
         switchFragment(fragment, false);
 
 
     }
 
-
+    @Override
     //@param addToBackStack need to prevent the bag when back key pressed
     // and you didn't go back to mainActivity
-    @Override
     public void switchFragment(Fragment fragment, boolean addToBackStack) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         if (addToBackStack) {
-            fragmentManager.beginTransaction().replace(R.id.pager, fragment).addToBackStack(null).commit();
+            fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
         } else {
-            fragmentManager.beginTransaction().replace(R.id.pager, fragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
         }
     }
 }

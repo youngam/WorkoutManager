@@ -3,6 +3,7 @@ package youngam.bsuir.exercises;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,12 @@ public class ExercisesForMusclesFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d(LOG_TAG, "onCreateView");
         View view = inflater.inflate(R.layout.biceps_layout, container, false);
+
+        try {
+            ((ActionBarActivity) getActivity()).getSupportActionBar().setTitle("Список упражнений:");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         //Получаем id нажатой группы мышц
         String muscleId = getArguments().getString("category");
