@@ -4,12 +4,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import youngam.bsuir.R;
 import youngam.bsuir.core.model.WorkoutCategory;
 import youngam.bsuir.listeners.OnFinishedListener;
 
@@ -28,7 +30,7 @@ public class MultiSelectionSpinner extends Spinner implements DialogInterface.On
         super(context, attrs);
         //Инициализируем адаптер и передаём спинеру
         adapter = new ArrayAdapter<>(context,
-                android.R.layout.simple_spinner_item);
+                R.layout.spinner_item);
         categories = new ArrayList<>();
         super.setAdapter(adapter);
     }
@@ -95,14 +97,18 @@ public class MultiSelectionSpinner extends Spinner implements DialogInterface.On
     // Тестовый режим, здесь будет идти запрос в базу
     public ArrayList<WorkoutCategory> getResult() {
         ArrayList<WorkoutCategory> result = new ArrayList<WorkoutCategory>();
+        boolean isAnythingSelected = false;
         for (int i = 0; i < items.length; ++i) {
             // проверяем, выбран ли элемент
             if (selection[i]) {
+                isAnythingSelected = true;
+                Log.d("Spinner", "selection complete");
                 //Добавляем элемент
                 result.add(categories.get(i));
             }
         }
-        return result;
+
+        return isAnythingSelected ? result : null;
     }
     private String buildSelectedItemString() {
         StringBuilder sb = new StringBuilder();

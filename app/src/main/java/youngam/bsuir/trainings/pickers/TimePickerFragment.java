@@ -5,6 +5,7 @@ import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.widget.TimePicker;
 
 import java.text.ParseException;
@@ -18,12 +19,11 @@ import youngam.bsuir.listeners.OnFinishedListener;
  */
 public  class TimePickerFragment extends DialogFragment
         implements TimePickerDialog.OnTimeSetListener {
-    private int[] result;
+    private int[] result = new int[2];
     private OnFinishedListener mListener;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        result = new int[2];
         // Use the current time as the default values for the picker
         final Calendar c = Calendar.getInstance();
         int hour = c.get(Calendar.HOUR_OF_DAY);
@@ -48,7 +48,15 @@ public  class TimePickerFragment extends DialogFragment
     }
 
     public int[] getResult(){
-        return result;
+
+        if(result != null){
+            Log.d("DatePicker", "date == null");
+            return result ;
+        }
+        else{
+            Log.d("DatePicker", "date != null");
+            return MyCalendar.getArrayOfTime();
+        }
     }
 
     public String getText() throws ParseException {

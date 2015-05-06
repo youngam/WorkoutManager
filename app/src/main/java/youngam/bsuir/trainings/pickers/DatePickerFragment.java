@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.DatePicker;
 
 import java.text.ParseException;
@@ -17,7 +18,7 @@ import youngam.bsuir.listeners.OnFinishedListener;
  */
 public class DatePickerFragment extends DialogFragment
         implements DatePickerDialog.OnDateSetListener {
-    private int[] date;
+    private int[] date = new int[3];
     private OnFinishedListener mListener;
 
     @Override
@@ -30,12 +31,15 @@ public class DatePickerFragment extends DialogFragment
         int day = c.get(Calendar.DAY_OF_MONTH);
 
         // Create a new instance of DatePickerDialog and return it
-        return new DatePickerDialog(getActivity(), this, year, month, day);
+        DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, year, month, day);
+        dialog.getDatePicker().setMinDate(MyCalendar.getDateNowMilliseconds());
+        dialog.getDatePicker().setMaxDate(MyCalendar.getDateNowMilliseconds() + MyCalendar.DAYS_IN_YEAR * MyCalendar.COUNT_OF_YEARS *
+             MyCalendar.MILLISECONDS_IN_DAY);
+        return dialog;
     }
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
         // Do something with the date chosen by the user
-        date = new int[3];
         date[0] = year;
         date[1] = month;
         date[2] = day;
@@ -44,11 +48,23 @@ public class DatePickerFragment extends DialogFragment
     }
 
     public int[] getResult() {
-        return date;
+        if(date != null){
+            Log.d("DatePicker", "date == null");
+            return date ;
+        }
+        else{
+            Log.d("DatePicker", "date != null");
+            return MyCalendar.getArrayOfDate();
+        }
+
     }
     public String getText() throws ParseException {
 
         return MyCalendar.toDate(date);
+    }
+    public long getDateMilliseconds(){
+
+        return MyCalendar.toMilliseconds(date);
     }
 
     public void setOnFinishedListener(OnFinishedListener listener) {

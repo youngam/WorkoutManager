@@ -9,16 +9,18 @@
 
 
     <Button
+        android:theme="@style/AppTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Техника упражнений"
         android:id="@+id/manButton"
-        android:layout_marginBottom="106dp"
+        android:layout_marginBottom="151dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <Button
+        android:theme="@style/AppTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Trainings"

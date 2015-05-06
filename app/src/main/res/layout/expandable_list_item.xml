@@ -19,10 +19,20 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Large Text"
         android:id="@+id/txtMuscle"
         android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+
+    <View
+        android:background="@color/material_blue_grey_900"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@+id/txtDate"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 </RelativeLayout>

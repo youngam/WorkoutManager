@@ -11,6 +11,8 @@ import java.util.Calendar;
  */
 public class MyCalendar {
     public static final long MILLISECONDS_IN_DAY = 24*60*60*1000;
+    public static final int DAYS_IN_YEAR = 365;
+    public static final int COUNT_OF_YEARS = 2;
 
 
 
@@ -23,6 +25,13 @@ public class MyCalendar {
         SimpleDateFormat format = new SimpleDateFormat("HH:mm");
         return format.format(format.parse(currTime));
 
+    }
+
+    public static int getDifference(long date){
+        Calendar calendar = Calendar.getInstance();
+        long dateNow = calendar.getTimeInMillis();
+
+        return (int) ((date - dateNow)/MILLISECONDS_IN_DAY);
     }
 
     public static String getDate(long date) throws ParseException {
@@ -43,23 +52,34 @@ public class MyCalendar {
         calendar.set(date[0], date[1], date[2], time[0], time[1]);
         return calendar.getTimeInMillis();
     }
-
-    public static long DateToMilliseconds(int[] date){
+    public static long toMilliseconds(int[] date){
         Calendar calendar = Calendar.getInstance();
         calendar.set(date[0], date[1], date[2]);
         return calendar.getTimeInMillis();
     }
 
-    public static long TimeToMilliseconds(int[] time){
+    public static int[] getArrayOfDate(){
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR, time[0]);
-        calendar.set(Calendar.MINUTE, time[1]);
-        return calendar.getTimeInMillis();
+        int[] date = new int[3];
+        date[0] = calendar.get(Calendar.YEAR);
+        // month begin with 0 finish 11
+        date[1] = calendar.get(Calendar.MONTH) + 1;
+        date[2] = calendar.get(Calendar.DAY_OF_MONTH);
+        return date;
+    }
+
+    public static int[] getArrayOfTime(){
+        Calendar calendar = Calendar.getInstance();
+        int[] time = new int[3];
+        time[0] = calendar.get(Calendar.HOUR_OF_DAY);
+        // month begin with 0 finish 11
+        time[1] = calendar.get(Calendar.MINUTE);
+        return time;
     }
 
     public static String toDate(int[] date) throws ParseException {
         // date[0] - year, date[1] - month, date[2] - day
-        //date[1] + 1, because months begins with 0
+        //date[1] + 1, because months begin with 0
 
         String currDate = date[2] + "."+ (date[1] + 1) + "." + date[0];
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");

@@ -1,6 +1,5 @@
 package youngam.bsuir.trainings;
 
-import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,15 +7,24 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.software.shell.fab.ActionButton;
 
 import java.text.ParseException;
 
 import youngam.bsuir.R;
 import youngam.bsuir.core.model.MyCalendar;
+import youngam.bsuir.listeners.OnFinishedListener;
+import youngam.bsuir.listeners.SwitchFragmentListener;
+import youngam.bsuir.trainings.pickers.DatePickerFragment;
 
 /**
  * Created by Alex on 09.03.2015.
@@ -24,7 +32,15 @@ import youngam.bsuir.core.model.MyCalendar;
 public class TrainingFragment extends Fragment{
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;
+    private ActionButton actionButton;
     private ActionBar mAction;
+    private DatePickerFragment datePickerFragment;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -35,6 +51,20 @@ public class TrainingFragment extends Fragment{
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        actionButton = (ActionButton) view.findViewById(R.id.action_button);
+        actionButton = (ActionButton) view.findViewById(R.id.action_button);
+        actionButton.setButtonColor(getResources().getColor(R.color.fab_material_blue_900));
+        actionButton.setButtonColorPressed(getResources().getColor(R.color.fab_material_blue_500));
+        actionButton.setImageDrawable(getResources().getDrawable(R.drawable.fab_plus_icon));
+        actionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddingWorkoutFragment addingWorkoutFragment = new AddingWorkoutFragment();
+                ((SwitchFragmentListener)getActivity()).switchFragment(addingWorkoutFragment, true);
+            }
+        });
+
+        mAction.setDisplayShowTitleEnabled(true);
         mPager = (ViewPager) view.findViewById(R.id.pager);
         mPagerAdapter = new ScreenSlidePagerAdapter(getChildFragmentManager());
         mPager.setAdapter(mPagerAdapter);
@@ -64,8 +94,30 @@ public class TrainingFragment extends Fragment{
         return view;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_main, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_calendar:
+                datePickerFragment = new DatePickerFragment();
+                datePickerFragment.setOnFinishedListener(new OnFinishedListener() {
+                    @Override
+                    public void onFinish() {
+                        mPager.setCurrentItem(MyCalendar.getDifference(datePickerFragment.getDateMilliseconds()));
+                    }
+                });
+                datePickerFragment.show(getActivity().getFragmentManager(), "datePicker");
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
-        private final int DAY_IN_YEAR = 364;
         public ScreenSlidePagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -79,8 +131,7 @@ public class TrainingFragment extends Fragment{
 
         @Override
         public int getCount() {
-            //TODO: choose an interval of a time to show exercises
-            return DAY_IN_YEAR;
-        }
+            return MyCalendar.DAYS_IN_YEAR * MyCalendar.COUNT_OF_YEARS;
     }
+}
 }

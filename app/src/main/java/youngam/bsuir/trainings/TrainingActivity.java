@@ -24,6 +24,7 @@ public class TrainingActivity extends ActionBarActivity implements SwitchFragmen
 
     }
 
+
     @Override
     //@param addToBackStack need to prevent the bag when back key pressed
     // and you didn't go back to mainActivity
@@ -36,3 +37,4 @@ public class TrainingActivity extends ActionBarActivity implements SwitchFragmen
         }
     }
 }
+

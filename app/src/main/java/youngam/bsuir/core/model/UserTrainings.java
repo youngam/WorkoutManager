@@ -54,11 +54,7 @@ public class UserTrainings {
     }
 
     public ArrayList<WorkoutCategory> getExercises() {
-       /* StringBuilder result = new StringBuilder();
-        for(WorkoutCategory category : exercises){
-            result.append(category.getName());
-            result.append("\n");
-        }*/
+
         return exercises;
     }
 

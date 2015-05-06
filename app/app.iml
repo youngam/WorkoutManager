@@ -92,5 +92,6 @@
     <orderEntry type="library" exported="" name="support-annotations-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="YouTubeAndroidPlayerApi" level="project" />
     <orderEntry type="library" exported="" name="acra-4.6.1" level="project" />
+    <orderEntry type="library" exported="" name="fab-1.0.5" level="project" />
   </component>
 </module>

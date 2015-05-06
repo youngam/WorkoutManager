@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -30,8 +30,8 @@ public class AddingWorkoutFragment extends Fragment implements View.OnClickListe
     private ArrayList<WorkoutCategory> exercisesChose;
     private DatePickerFragment datePicker;
     private TimePickerFragment timePicker;
-    private TextView textTime;
-    private TextView textDate;
+    private Button btnTime;
+    private Button btnDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -41,13 +41,13 @@ public class AddingWorkoutFragment extends Fragment implements View.OnClickListe
         // Component initialization
         Button addButton = (Button) view.findViewById(R.id.btnAdd);
         addButton.setOnClickListener(this);
-         textDate = (TextView) view.findViewById(R.id.textDate);
-         textTime = (TextView) view.findViewById(R.id.textTime);
-         textDate.setText(MyCalendar.getDateNow());
-         textTime.setText(MyCalendar.getTimeNow());
+        btnDate = (Button) view.findViewById(R.id.bttnDate);
+        btnTime = (Button) view.findViewById(R.id.bttnTime);
+        btnDate.setText(MyCalendar.getDateNow());
+        btnTime.setText(MyCalendar.getTimeNow());
 
-        textDate.setOnClickListener(this);
-        textTime.setOnClickListener(this);
+        btnDate.setOnClickListener(this);
+        btnTime.setOnClickListener(this);
 
         //Initialization of the db
         db = new MySQLiteDB();
@@ -65,10 +65,16 @@ public class AddingWorkoutFragment extends Fragment implements View.OnClickListe
                 ArrayList<WorkoutCategory> exercises = new ArrayList<WorkoutCategory>();
 
 
-                for (WorkoutCategory category : spinnerGroups.getResult()) {
-                    exercises.addAll(db.getExercises(category.getId()));
+                if (spinnerGroups.getResult() == null) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Please choose muscle group",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    for (WorkoutCategory category : spinnerGroups.getResult()) {
+                        exercises.addAll(db.getExercises(category.getId()));
+                        Log.d("AddingWorkout", category.getName());
+                    }
+                    spinnerExercises.setItems(exercises);
                 }
-                spinnerExercises.setItems(exercises);
 
 
             }
@@ -91,24 +97,28 @@ public class AddingWorkoutFragment extends Fragment implements View.OnClickListe
         switch (v.getId()) {
             case R.id.btnAdd:
 
-                // Добавление в таблицу даты и времени
                 long currDate = MyCalendar.toMilliseconds(datePicker.getResult(), timePicker.getResult());
                 db.addToDate(currDate);
 
                 String dateId = db.getDateId(currDate);
 
-                for(WorkoutCategory category : exercisesChose) {
+                if (exercisesChose == null) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Choose muscle groups and exercises "
+                            , Toast.LENGTH_SHORT).show();
+                } else {
+                    for (WorkoutCategory category : exercisesChose) {
 
-                    db.addToUserTrainings(category.getId(), dateId);
-                    Log.d("DEBUG", "exerciseId: " + category.getId() + "dateId: " + dateId);
+                        db.addToUserTrainings(category.getId(), dateId);
+                        Log.d("DEBUG", "exerciseId: " + category.getId() + "dateId: " + dateId);
+                    }
                 }
 
                 break;
-            case R.id.textTime:
+            case R.id.bttnTime:
                 showTimePickerDialog();
 
                 break;
-            case R.id.textDate:
+            case R.id.bttnDate:
                 showDatePickerDialog();
                 break;
 
@@ -124,7 +134,7 @@ public class AddingWorkoutFragment extends Fragment implements View.OnClickListe
             public void onFinish() {
                 // Here I can get information from DatePickerDialog
                 try {
-                    textDate.setText(datePicker.getText());
+                    btnDate.setText(datePicker.getText());
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -140,7 +150,7 @@ public class AddingWorkoutFragment extends Fragment implements View.OnClickListe
             @Override
             public void onFinish() {
                 try {
-                    textTime.setText(timePicker.getText());
+                    btnTime.setText(timePicker.getText());
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

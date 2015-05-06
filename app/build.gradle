@@ -25,4 +25,5 @@ dependencies {
     compile files('src/androidTest/java/acra-4.6.1.jar')
     compile files('src/main/java/YouTubeAndroidPlayerApi.jar')
     compile files('src/androidTest/java/youngam/bsuir/joda-time-2.1.jar')
+    compile 'com.github.shell-software:fab:1.0.5'
 }
