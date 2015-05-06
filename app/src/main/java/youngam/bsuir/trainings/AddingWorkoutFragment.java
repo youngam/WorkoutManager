@@ -66,7 +66,7 @@ public class AddingWorkoutFragment extends Fragment implements View.OnClickListe
 
 
                 if (spinnerGroups.getResult() == null) {
-                    Toast.makeText(getActivity().getApplicationContext(), "Please choose muscle group",
+                    Toast.makeText(getActivity().getApplicationContext(), "Выберите группу мышц",
                             Toast.LENGTH_SHORT).show();
                 } else {
                     for (WorkoutCategory category : spinnerGroups.getResult()) {
@@ -87,6 +87,8 @@ public class AddingWorkoutFragment extends Fragment implements View.OnClickListe
 
             }
         });
+        datePicker = new DatePickerFragment();
+        timePicker = new TimePickerFragment();
 
         return view;
 
@@ -97,20 +99,23 @@ public class AddingWorkoutFragment extends Fragment implements View.OnClickListe
         switch (v.getId()) {
             case R.id.btnAdd:
 
+                //TODO :  check if user don't click on data or time set button
                 long currDate = MyCalendar.toMilliseconds(datePicker.getResult(), timePicker.getResult());
                 db.addToDate(currDate);
 
                 String dateId = db.getDateId(currDate);
 
                 if (exercisesChose == null) {
-                    Toast.makeText(getActivity().getApplicationContext(), "Choose muscle groups and exercises "
+                    Toast.makeText(getActivity().getApplicationContext(), "Выберите упражнения  "
                             , Toast.LENGTH_SHORT).show();
                 } else {
                     for (WorkoutCategory category : exercisesChose) {
 
                         db.addToUserTrainings(category.getId(), dateId);
-                        Log.d("DEBUG", "exerciseId: " + category.getId() + "dateId: " + dateId);
+                        Log.d("AddingWorkout OnClick()", "exerciseId: " + category.getId() + "dateId: " + dateId);
                     }
+                    Toast.makeText(getActivity().getApplicationContext(), "Тренировка добавлена"
+                            , Toast.LENGTH_SHORT).show();
                 }
 
                 break;
@@ -127,7 +132,6 @@ public class AddingWorkoutFragment extends Fragment implements View.OnClickListe
 
 
     public void showDatePickerDialog() {
-        datePicker = new DatePickerFragment();
         datePicker.show(getActivity().getFragmentManager(), "datePicker");
         datePicker.setOnFinishedListener(new OnFinishedListener() {
             @Override
@@ -144,7 +148,6 @@ public class AddingWorkoutFragment extends Fragment implements View.OnClickListe
     }
 
     public void showTimePickerDialog() {
-        timePicker = new TimePickerFragment();
         timePicker.show(getActivity().getFragmentManager(), "timePicker");
         timePicker.setOnFinishedListener(new OnFinishedListener() {
             @Override

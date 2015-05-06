@@ -48,18 +48,6 @@ public class ListOfTrainingsFragment extends Fragment {
             txtView.setVisibility(View.VISIBLE);
         }
 
-
-      /*  actionButton = (ActionButton) view.findViewById(R.id.action_button);
-        actionButton.setButtonColor(getResources().getColor(R.color.fab_material_blue_900));
-        actionButton.setButtonColorPressed(getResources().getColor(R.color.fab_material_blue_500));
-        actionButton.setImageDrawable(getResources().getDrawable(R.drawable.fab_plus_icon));
-        actionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AddingWorkoutFragment addingWorkoutFragment = new AddingWorkoutFragment();
-                ((SwitchFragmentListener)getActivity()).switchFragment(addingWorkoutFragment, true);
-            }
-        });*/
         return view;
     }
 

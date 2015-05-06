@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.DatePicker;
 
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Calendar;
 
 import youngam.bsuir.core.model.MyCalendar;
@@ -25,6 +26,7 @@ public class DatePickerFragment extends DialogFragment
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         // Use the current date as the default date in the picker
+
         final Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
@@ -34,7 +36,7 @@ public class DatePickerFragment extends DialogFragment
         DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, year, month, day);
         dialog.getDatePicker().setMinDate(MyCalendar.getDateNowMilliseconds());
         dialog.getDatePicker().setMaxDate(MyCalendar.getDateNowMilliseconds() + MyCalendar.DAYS_IN_YEAR * MyCalendar.COUNT_OF_YEARS *
-             MyCalendar.MILLISECONDS_IN_DAY);
+                MyCalendar.MILLISECONDS_IN_DAY);
         return dialog;
     }
 
@@ -48,21 +50,21 @@ public class DatePickerFragment extends DialogFragment
     }
 
     public int[] getResult() {
-        if(date != null){
-            Log.d("DatePicker", "date == null");
-            return date ;
-        }
-        else{
-            Log.d("DatePicker", "date != null");
+        if(Arrays.equals(date, new int[]{0,0,0})) {
+            Log.d("getResult", "null");
             return MyCalendar.getArrayOfDate();
+        } else{
+            Log.d("getResult", "not null");
+            return date;
         }
-
     }
+
     public String getText() throws ParseException {
 
         return MyCalendar.toDate(date);
     }
-    public long getDateMilliseconds(){
+
+    public long getDateMilliseconds() {
 
         return MyCalendar.toMilliseconds(date);
     }

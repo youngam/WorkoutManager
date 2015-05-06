@@ -52,7 +52,6 @@ public class TrainingFragment extends Fragment{
             e.printStackTrace();
         }
         actionButton = (ActionButton) view.findViewById(R.id.action_button);
-        actionButton = (ActionButton) view.findViewById(R.id.action_button);
         actionButton.setButtonColor(getResources().getColor(R.color.fab_material_blue_900));
         actionButton.setButtonColorPressed(getResources().getColor(R.color.fab_material_blue_500));
         actionButton.setImageDrawable(getResources().getDrawable(R.drawable.fab_plus_icon));

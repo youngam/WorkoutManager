@@ -63,8 +63,9 @@ public class MyCalendar {
         int[] date = new int[3];
         date[0] = calendar.get(Calendar.YEAR);
         // month begin with 0 finish 11
-        date[1] = calendar.get(Calendar.MONTH) + 1;
+        date[1] = calendar.get(Calendar.MONTH);
         date[2] = calendar.get(Calendar.DAY_OF_MONTH);
+        Log.d("MyCalendar", date[2] + ":" + date[1]+ ":" + date[0]);
         return date;
     }
 

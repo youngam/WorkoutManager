@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.TimePicker;
 
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Calendar;
 
 import youngam.bsuir.core.model.MyCalendar;
@@ -19,7 +20,7 @@ import youngam.bsuir.listeners.OnFinishedListener;
  */
 public  class TimePickerFragment extends DialogFragment
         implements TimePickerDialog.OnTimeSetListener {
-    private int[] result = new int[2];
+    private int[] result = new int[3];
     private OnFinishedListener mListener;
 
     @Override
@@ -48,14 +49,12 @@ public  class TimePickerFragment extends DialogFragment
     }
 
     public int[] getResult(){
-
-        if(result != null){
-            Log.d("DatePicker", "date == null");
-            return result ;
-        }
-        else{
-            Log.d("DatePicker", "date != null");
+        if(Arrays.equals(result, new int[]{0, 0, 0})) {
+            Log.d("getResult", "null");
             return MyCalendar.getArrayOfTime();
+        } else{
+            Log.d("getResult", "not null");
+            return result;
         }
     }
 
