@@ -7,6 +7,7 @@
     <style name="CustomActionBarTheme"
         parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <item name="android:calendarViewStyle">@style/date_picker</item>
         <item name="android:buttonStyle">@style/MyButton</item>
         <item name="colorAccent">@color/fab_material_blue_900</item>
         <item name="colorPrimaryDark">@color/fab_material_blue_900</item>
@@ -19,6 +20,10 @@
         <item name="android:background">@color/fab_material_blue_900</item>
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:textSize">25dp</item>
+    </style>
+
+    <style name="date_picker" parent="@android:style/Widget.DeviceDefault.DatePicker">
+    <item name="android:divider">@color/fab_material_blue_900</item>
     </style>
 
     <!-- ActionBar styles -->
