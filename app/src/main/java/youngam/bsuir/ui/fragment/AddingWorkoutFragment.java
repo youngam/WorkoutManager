@@ -100,16 +100,15 @@ public class AddingWorkoutFragment extends Fragment implements View.OnClickListe
         switch (v.getId()) {
             case R.id.btnAdd:
 
-                //TODO :  check if user don't click on data or time set button
-                long currDate = MyCalendar.toMilliseconds(datePicker.getResult(), timePicker.getResult());
-                db.addToDate(currDate);
-
-                String dateId = db.getDateId(currDate);
-
                 if (exercisesChose == null) {
                     Toast.makeText(getActivity().getApplicationContext(), "Выберите упражнения  "
                             , Toast.LENGTH_SHORT).show();
+                    Log.d("AddingWorkout OnClick()", "exerciseChose == null");
                 } else {
+                    long currDate = MyCalendar.toMilliseconds(datePicker.getResult(), timePicker.getResult());
+                    db.addToDate(currDate);
+
+                    String dateId = db.getDateId(currDate);
                     for (WorkoutCategory category : exercisesChose) {
 
                         db.addToUserTrainings(category.getId(), dateId);

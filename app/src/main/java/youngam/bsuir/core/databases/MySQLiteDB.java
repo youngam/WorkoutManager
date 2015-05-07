@@ -155,7 +155,6 @@ public class MySQLiteDB {
 
 
              mExercises.add(new UserTrainings(listOfDates.getDate(),listOfDates.getId(), groupName, categories));
-             categories = null;
 
         }
 

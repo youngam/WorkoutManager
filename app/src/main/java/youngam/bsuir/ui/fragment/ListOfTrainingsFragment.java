@@ -4,30 +4,27 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
-import com.software.shell.fab.ActionButton;
-
 import java.util.ArrayList;
 
 import youngam.bsuir.R;
-import youngam.bsuir.ui.adapter.ExpandableListAdapter;
-import youngam.bsuir.core.model.UserTrainings;
 import youngam.bsuir.core.databases.MySQLiteDB;
+import youngam.bsuir.core.model.UserTrainings;
 import youngam.bsuir.ui.activity.TrainingActivity;
+import youngam.bsuir.ui.adapter.ExpandableListAdapter;
 
 /**
  * Created by Alex on 25.04.2015.
  */
 public class ListOfTrainingsFragment extends Fragment {
     private ExpandableListView listView;
-    private ActionButton actionButton;
     private ArrayList<UserTrainings> trainings;
-    private String[][] children;
     private ActionBar mActionBar;
     private MySQLiteDB db;
     private TextView txtView;
@@ -45,6 +42,9 @@ public class ListOfTrainingsFragment extends Fragment {
         db.initDb(getActivity().getApplicationContext());
         trainings = new ArrayList<>();
         trainings = db.getUserTrainings(currentDate);
+        for(UserTrainings training : trainings){
+            Log.d("ListOfTrainings", training.getMuscleGroups());
+        }
         if(trainings.isEmpty()){
             txtView.setVisibility(View.VISIBLE);
         }
